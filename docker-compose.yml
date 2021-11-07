@@ -1,0 +1,15 @@
+version: "3"
+services:
+  jupyter:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: aws.jupyter
+    environment: 
+      JUPYTER_ENABLE_LAB: 'yes'
+    volumes:
+      - .:/work:rw
+    network_mode: "host"
+    working_dir: /work
+    command: start-notebook.sh --NotebookApp.password='${JUPYTER_PASSWORD:-sha1:24de3ff28f41:a54dc1da12900818744e38dc04a463800afaeecd}'
+    restart: "no"
