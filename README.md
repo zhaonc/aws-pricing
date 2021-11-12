@@ -21,4 +21,4 @@ Also you may use `docker-compose.yml` as an example. You may need to change the 
 
 ## Disclaimer
 
-The APIs used in this project can be found on AWS pricing pages. This author is not affiliated with Amazon AWS. Use this software and information at your own risk.
+The APIs used in this project can be found on AWS pricing pages. The author of this project is not affiliated with Amazon AWS. Use this software and information at your own risk.
