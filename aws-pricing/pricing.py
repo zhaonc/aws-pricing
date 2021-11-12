@@ -3,6 +3,7 @@ import requests
 import re
 import json
 import pandas as pd
+import numpy as np
 from constants import REGIONS, INSTANCE_TYPES
 
 
@@ -14,6 +15,8 @@ def get_spot_prices():
     raw_text = response.text
     matches = re.findall(r'callback\((.*)\);', raw_text, re.MULTILINE | re.DOTALL)
     data = json.loads(matches[0])
+
+    instance_name_pattern = r'([\w\d-]+)\.([\w\d]+)'
 
     # Parse JSON
     parsed = []
@@ -29,41 +32,28 @@ def get_spot_prices():
             instance_type_name, instance_type_generation = INSTANCE_TYPES.get(type_name)
             
             for size in instance_type['sizes']:
-                size_name = size['size']
+                instance_name = size['size']
+                if match := re.search(instance_name_pattern, instance_name):
+                    instance_family = match.group(1)
+                    instance_size = match.group(2)
                 
                 for value_column in size['valueColumns']:
                     value_column_name = value_column['name']
                     value_column_price = value_column['prices'][currency]
+                    try:
+                        value_column_price = float(value_column_price)
+                    except ValueError:
+                        value_column_price = np.nan
                     parsed.append({
                         'region': REGIONS.get(region_name, region_name),
                         'instance_type': instance_type_name,
                         'generation': instance_type_generation,
-                        'instance_size': size_name,
+                        'instance_name': instance_name,
+                        'instance_family': instance_family,
+                        'instance_size': instance_size,
                         'system': value_column_name,
                         'price': value_column_price
                     })
 
     df = pd.DataFrame(parsed)
     return df
-
-def get_researched_instance_options():
-    url = 'https://b0.p.awsstatic.com/pricing/2.0/meteredUnitMaps/ec2/USD/current/ec2-reservedinstance/metadata.json?timestamp={}'.format(int(time.time()))
-    response = requests.get(url)
-
-    # Get data and parse as JSON
-    raw_text = response.text
-    data = json.loads(raw_text)
-
-    contract_length = data['valueAttributes']['plc:LeaseContractLength']
-    purchase_option = data['valueAttributes']['PurchaseOption']
-    location = data['valueAttributes']['Location']
-    tenancy = data['valueAttributes']['Tenancy']
-    system = data['valueAttributes']['plc:OperatingSystem']
-
-    return {
-        'contract_length': contract_length,
-        'purchase_option': purchase_option,
-        'location': location,
-        'tenancy': tenancy,
-        'system': system
-    }
