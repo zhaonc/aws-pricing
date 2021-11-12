@@ -2,11 +2,22 @@
 
 ## Introduction
 
-Quickly navigate the spot pricing and reserved instance pricing at Amazong AWS. Refer to AWS pricing pages for details ([spot](https://aws.amazon.com/ec2/spot/pricing/), [reserved instance](https://aws.amazon.com/ec2/pricing/reserved-instances/pricing/)).
+Quickly navigate the spot pricing at Amazong AWS. Refer to AWS pricing pages for details ([spot](https://aws.amazon.com/ec2/spot/pricing/).
 
 ## Usage
 
-`docker-compose up -d` to run the docker environment. Default password for JupyterLab environment is `aws`.
+Run `streamlit run main.py` from `aws-pricing`. By default [streamlit](https://streamlit.io/) will listen on port 8501.
+
+## Deployment
+
+Build and run Docker container with `Dockerfile`. For example
+
+```
+docker build -t aws-pricing .
+docker run -p 80:8501 aws-pricing
+```
+
+Also you may use `docker-compose.yml` as an example. You may need to change the network options `network_mode` to your desired setup.
 
 ## Disclaimer
 

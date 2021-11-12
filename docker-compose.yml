@@ -9,5 +9,3 @@ services:
       JUPYTER_ENABLE_LAB: 'yes'
     restart: "no"
     network_mode: "host"
-    # ports:
-    #   - "8501:8501"
