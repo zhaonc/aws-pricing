@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Quickly navigate the spot pricing at Amazong AWS. Refer to AWS pricing pages for details ([spot](https://aws.amazon.com/ec2/spot/pricing/).
+Quickly navigate the spot pricing at Amazong AWS. Refer to AWS pricing pages for [details](https://aws.amazon.com/ec2/spot/pricing/).
 
 ## Usage
 
